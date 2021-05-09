@@ -1,0 +1,67 @@
+/****** Object:  StoredProcedure [DDS].[usp_DimensionTables_Load]    Script Date: 9/05/2021 11:43:34 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [DDS].[usp_DimensionTables_Load]
+     @EnableIncrementalLoad bit = 1
+	,@Days int = -5
+AS
+    DECLARE @LoadDate datetime = DATEADD(dd,@Days,GETDATE())
+
+    EXEC [DDS].[usp_Dim_Currency_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_CurrencyExchange_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_Subsidiary_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_Location_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_Customer_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_CustomerType_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_Department_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_SalesChannel_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_Device_Load] @EnableIncrementalLoad
+
+    EXEC [DDS].[usp_Dim_DeviceChannel_Load] @EnableIncrementalLoad
+
+	--EXEC [DDS].[usp_Dim_StockTransactions_Load] @EnableIncrementalLoad
+
+    -- Dim_Sales table must be loaded last as there are dependencies on a few other dimension tables
+    EXEC [DDS].[usp_Dim_Sales_Load] @EnableIncrementalLoad, @LoadDate
+
+    EXEC [DDS].[usp_Dim_Budget_Load] @EnableIncrementalLoad
+
+	EXEC [DDS].[usp_Dim_StockTransactions_Load] @EnableIncrementalLoad, @LoadDate
+
+	EXEC [DDS].[usp_Dim_Item_Load] @EnableIncrementalLoad
+
+	EXEC [DDS].[usp_Dim_Accounts_Load] @EnableIncrementalLoad
+
+	EXEC [DDS].[usp_Dim_Vendor_Load] @EnableIncrementalLoad
+
+    -- Stored procedures added to support S&OP Report or Fact tables requiring slicing by item attributes
+    --EXEC [DDS].[usp_Dim_Item2_Load] @EnableIncrementalLoad-- To be renamed to [usp_Dim_Item_Load]
+    
+    --EXEC [DDS].[usp_Dim_AssortmentClassification_Load] @EnableIncrementalLoad   -- 20200101 SH
+    
+    --EXEC [DDS].[usp_Dim_ProductClassification_Load] @EnableIncrementalLoad      -- 20200101 SH
+    
+    --EXEC [DDS].[usp_Dim_ItemProductType_Load] @EnableIncrementalLoad            -- 20200101 SH
+    
+    --EXEC [DDS].[usp_Dim_ItemGroup_Load] @EnableIncrementalLoad                  -- 20200101 SH
+
+    --EXEC [DDS].[usp_Dim_SellPrice_Load] @EnableIncrementalLoad                  -- 20200102 SH
+
+    --EXEC [DDS].[usp_Dim_CostPrice_Load] @EnableIncrementalLoad                  -- 20200102 SH
+
+    --EXEC [DDS].[usp_Dim_DemandChannel_Load] @EnableIncrementalLoad=0
+
+GO
+
