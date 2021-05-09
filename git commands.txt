@@ -1,0 +1,25 @@
+On GitHub, navigate to the main page of the repository.
+Under your repository name, click Settings.
+Under Danger Zone, click Delete this repository.
+Read the warnings.
+To verify that you're deleting the correct repository, type the name of the repository you want to delete.
+
+
+Git Commands
+git clone copy repo details from github
+
+To add or track all modified files
+git add .
+
+git commit -m 'first content'
+
+######## Branch Code
+
+git push
+git push origin master
+
+git pull
+git pull
+
+
+C:\Users\balla\git_desktop_docker_airflow\ballatest09052021
